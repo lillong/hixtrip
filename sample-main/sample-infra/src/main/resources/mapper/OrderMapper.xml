@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hixtrip.sample.infra.db.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.hixtrip.sample.infra.db.dataobject.OrderDO">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderNo" column="order_no" jdbcType="INTEGER"/>
+            <result property="amount" column="amount" jdbcType="BIGINT"/>
+            <result property="des" column="des" jdbcType="VARCHAR"/>
+            <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_no,amount,
+        pay_amount,buyer_user_id,buyer_user_name,
+        commodity_id,commodity_name,seller_user_id,
+        seller_user_name,des,del_flag,
+        create_by,create_time,update_by,
+        update_time
+    </sql>
+</mapper>

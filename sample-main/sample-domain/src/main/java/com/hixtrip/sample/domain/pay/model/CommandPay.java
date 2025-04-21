@@ -15,10 +15,11 @@ public class CommandPay {
     /**
      * 订单id
      */
-    private String orderId;
+    private Long orderId;
 
     /**
      * 订单状态
      */
     private String payStatus;
+
 }

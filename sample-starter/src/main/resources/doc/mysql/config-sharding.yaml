@@ -1,0 +1,78 @@
+databaseName: order_db
+
+dataSources:
+  # 主库
+  master_order_0:
+    url: jdbc:mysql://192.168.1.133:3307/order_0?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  master_order_1:
+    url: jdbc:mysql://192.168.1.133:3307/order_1?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+  # 从库
+  slave1_order_0:
+    url: jdbc:mysql://192.168.1.133:3308/order_0?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  slave1_order_1:
+    url: jdbc:mysql://192.168.1.133:3308/order_1?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+  slave2_order_0:
+    url: jdbc:mysql://192.168.1.133:3309/order_0?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  slave2_order_1:
+    url: jdbc:mysql://192.168.1.133:3309/order_1?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+rules:
+  - !READWRITE_SPLITTING
+    dataSources:
+      rw_order_0:
+        staticStrategy:
+          writeDataSourceName: master_order_0
+          readDataSourceNames:
+            - slave1_order_0
+            - slave2_order_0
+        loadBalancerName: random
+
+      rw_order_1:
+        staticStrategy:
+          writeDataSourceName: master_order_1
+          readDataSourceNames:
+            - slave1_order_1
+            - slave2_order_1
+        loadBalancerName: random
+
+    loadBalancers:
+      random:
+        type: RANDOM
+
+  - !SHARDING
+    tables:
+      t_order:
+        actualDataNodes: rw_order_${0..1}.t_order_${202501..202512}
+        tableStrategy:
+          standard:
+            shardingColumn: create_month
+            shardingAlgorithmName: order_tb_inline
+        databaseStrategy:
+          standard:
+            shardingColumn: buyer_id
+            shardingAlgorithmName: order_db_inline
+
+    shardingAlgorithms:
+      order_tb_inline:
+        type: INLINE
+        props:
+          algorithm-expression: t_order_${create_month}
+
+      order_db_inline:
+        type: INLINE
+        props:
+          algorithm-expression: rw_order_${buyer_id % 2}

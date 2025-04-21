@@ -1,14 +1,23 @@
 package com.hixtrip.sample.infra.db.convertor;
 
+import com.hixtrip.sample.domain.order.model.Order;
+import com.hixtrip.sample.infra.db.dataobject.OrderDO;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 /**
  * DO对像 -> 领域对象转换器
- * todo 自由实现
+ * @author lill
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface OrderDOConvertor {
-    OrderDOConvertor INSTANCE = Mappers.getMapper(OrderDOConvertor.class);
+
+
+    OrderDO domainToDO(Order order);
+
+    List<Order> do2Domain(List<OrderDO> order);
+
+    Order do2Domain(OrderDO order);
 
 }

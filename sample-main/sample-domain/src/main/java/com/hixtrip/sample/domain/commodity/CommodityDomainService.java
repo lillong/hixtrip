@@ -2,14 +2,14 @@ package com.hixtrip.sample.domain.commodity;
 
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 
 /**
  * 商品领域服务
+ * @author lill
  */
 @Component
 public class CommodityDomainService {
-    public BigDecimal getSkuPrice(String skuId) {
-        return new BigDecimal(200);
+    public Long getSkuPrice(Long skuId) {
+        return 200L;
     }
 }

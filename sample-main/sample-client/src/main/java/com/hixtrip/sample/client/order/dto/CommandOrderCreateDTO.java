@@ -1,5 +1,6 @@
 package com.hixtrip.sample.client.order.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,22 +13,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommandOderCreateDTO {
+public class CommandOrderCreateDTO {
 
     /**
      * 商品规格id
      */
-    private String skuId;
+    @Schema(title = "商品规格id")
+    private Long skuId;
 
     /**
      * 购买数量
      */
-    private Integer amount;
+    @Schema(title = "购买数量")
+    private Long amount;
 
     /**
      * 用户id
      */
-    private String userId;
-
+    @Schema(title = "userId")
+    private Long userId;
 
 }

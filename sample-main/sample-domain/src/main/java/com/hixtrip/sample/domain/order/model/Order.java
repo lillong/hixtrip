@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * 订单表
+ * @author lill
  */
 @Data
 @NoArgsConstructor
@@ -19,65 +20,102 @@ import java.time.LocalDateTime;
 @SuperBuilder(toBuilder = true)
 public class Order {
 
-    /**
-     * 订单号
-     */
-    private String id;
+    //支付状态-未支付
+    public final static Integer PLAY_STATUS_NO= 0;
 
+    //支付状态-成功
+    public final static Integer PLAY_STATUS_SUCCEED = 1;
 
-    /**
-     * 购买人
-     */
-    private String userId;
-
+    //支付状态-失败
+    public final static Integer PLAY_STATUS_FAIL = -1;
 
     /**
-     * SkuId
+     * ID
      */
-    private String skuId;
+    private Long id;
+
+    /**
+     * 订单编号
+     */
+    private Long orderNo;
+
+    /**
+     * 价格
+     */
+    private Long price;
 
     /**
      * 购买数量
      */
-    private Integer amount;
+    private Long amount;
 
     /**
-     * 购买金额
+     * 购买人id
      */
-    private BigDecimal money;
+    private Long buyerId;
 
     /**
-     * 购买时间
+     * 购买人id
      */
-    private LocalDateTime payTime;
+    private String buyerName;
+
+    /**
+     * 商品规格
+     */
+    private Long skuId;
+
+    /**
+     * 卖方id
+     */
+    private Long sellerId;
 
     /**
      * 支付状态
      */
-    private String payStatus;
+    private Integer payStatus;
 
     /**
-     * 删除标志（0代表存在 1代表删除）
+     * 描述
      */
-    private Long delFlag;
+    private String des;
 
     /**
-     * 创建人
+     * 创建订单
+     *
+     * @param buyerId 购买人
+     * @param skuId   商品规格id
+     * @param amount  购买数量
+     * @return order  订单
      */
-    private String createBy;
+    public static Order create(Long buyerId, Long skuId, Long amount) {
+        return Order.builder()
+                .buyerId(buyerId)
+                .skuId(skuId)
+                .amount(amount)
+                .sellerId(1L)
+                .buyerName("小"+buyerId)
+                .payStatus(PLAY_STATUS_NO)
+                .build();
+    }
 
     /**
-     * 创建时间
+     * 生成订单号
      */
-    private LocalDateTime createTime;
+    public void generateOrderNo() {
+        this.orderNo = System.currentTimeMillis();
+    }
 
     /**
-     * 修改人
+     * 支付成功
      */
-    private String updateBy;
+    public void paySuccess() {
+        this.payStatus= PLAY_STATUS_SUCCEED;
+    }
 
     /**
-     * 修改时间
+     * z支付失败
      */
-    private LocalDateTime updateTime;
+    public void payFail() {
+        this.payStatus= PLAY_STATUS_FAIL;
+    }
 }
